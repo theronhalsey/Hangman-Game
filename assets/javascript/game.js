@@ -1,0 +1,98 @@
+/*   //make guessing buttons
+      var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+      for (var i = 0; i < letters.length; i++) {
+        var letterBtn = $("<button>");
+        letterBtn.addClass("letter-button letter letter-button-color");
+        letterBtn.attr("data-letter", letters[i]);
+        letterBtn.text(letters[i]);
+        $("#buttons").append(letterBtn);
+      }
+
+      $(".letter-button").on("click", function () {
+        var fridgeMagnet = $("<div>");
+        fridgeMagnet.addClass("letter fridge-color");
+        fridgeMagnet.text($(this).attr("data-letter"));
+        $("#graveyard").append(fridgeMagnet);
+      });
+ */
+//get a random word
+$.get('https://raw.githubusercontent.com/AlexHakman/Java-challenge/master/words.txt', function (wholeTextFile) {
+  var lines = wholeTextFile.split("\n");
+  var randomIndex = Math.floor(Math.random() * lines.length);
+  var hangWord = lines[randomIndex];
+  var previousGuesses = new Array;
+  var wrongGuessCount;
+
+  console.log(hangWord);
+  console.log(typeof hangWord);
+
+  //replace display of work with _s
+  var placeHold = [];
+  for (var i = 0; i < hangWord.length; i++) placeHold.push("_");
+
+  console.log(placeHold);
+
+  document.getElementById("guessWord").innerHTML = (placeHold.join(" "));
+
+
+  //take guesses for letters
+  $(document).on("keyup", handleKeyUp);
+  function handleKeyUp(event) {
+    if (event.keyCode > 64 && event.keyCode < 91) {
+      var found = false;
+      var previouslyEntered = false;
+      var input = String.fromCharCode
+        (event.keyCode).toLowerCase();
+
+      for (i = 0; i < previousGuesses.length; i++) {
+        if (input == previousGuesses[i]) {
+          previouslyEntered = true;
+        }
+      }
+
+
+      //process guesses
+      if (!previouslyEntered) {
+        previousGuesses.push(input);
+
+        for (i = 0; i < hangWord.length; i++) {
+
+          if (input == hangWord[i]) {
+            found = true;
+            $('#t' + i).append(input);
+          }
+        }
+        if (found) {
+          checkAnswer();
+          function checkAnswer() {
+            var guessWord = "";
+            for (var i = 0; i < hangWord.length; i++) placeHold.push(input); {
+              guessWord += ($('#t' + i).text());
+            }
+          }
+        }
+        else { wrongAnswer(input); }
+      }
+    }
+  }
+
+  //display correct guesses by replacing blanks
+
+
+
+  //create winning and losing conditions
+  if (guessWord == hangWord) {
+    victoryMessage();
+  };
+
+
+  function wrongAnswer(a) {
+    wrongGuessCount++;
+    /* var pos = (wrongGuessCount * -75) + "px" */
+    $('#graveyard').append(" " + a);
+    if (wrongGuessCount == 6) {
+      defeatMessage();
+    }
+  }
+
+});
