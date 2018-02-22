@@ -21,10 +21,9 @@ $.get('https://raw.githubusercontent.com/AlexHakman/Java-challenge/master/words.
   var randomIndex = Math.floor(Math.random() * lines.length);
   var hangWord = lines[randomIndex];
   var previousGuesses = new Array;
-  var wrongGuessCount;
+  var wrongGuessCount = [];
 
   console.log(hangWord);
-  console.log(typeof hangWord);
 
   //replace display of work with _s
   var placeHold = [];
@@ -59,19 +58,23 @@ $.get('https://raw.githubusercontent.com/AlexHakman/Java-challenge/master/words.
 
           if (input == hangWord[i]) {
             found = true;
-            $('#t' + i).append(input);
+            $().append(input);
           }
         }
         if (found) {
           checkAnswer();
           function checkAnswer() {
-            var guessWord = "";
+            var guessWord = [];
             for (var i = 0; i < hangWord.length; i++) placeHold.push(input); {
-              guessWord += ($('#t' + i).text());
+              guessWord.push(input);
+
+              console.log(guessWord);
             }
           }
         }
-        else { wrongAnswer(input); }
+        else { wrongAnswer();
+          wrongGuessCount.push(input);
+        }
       }
     }
   }
@@ -86,12 +89,12 @@ $.get('https://raw.githubusercontent.com/AlexHakman/Java-challenge/master/words.
   };
 
 
-  function wrongAnswer(a) {
-    wrongGuessCount++;
-    /* var pos = (wrongGuessCount * -75) + "px" */
-    $('#graveyard').append(" " + a);
-    if (wrongGuessCount == 6) {
-      defeatMessage();
+  function wrongAnswer() {
+    
+    console.log(wrongGuessCount);
+
+    if (wrongGuessCount.length === 6) {
+      alert("You lose!")
     }
   }
 
