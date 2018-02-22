@@ -20,17 +20,25 @@ $.get('https://raw.githubusercontent.com/AlexHakman/Java-challenge/master/words.
   var lines = wholeTextFile.split("\n");
   var randomIndex = Math.floor(Math.random() * lines.length);
   var hangWord = lines[randomIndex];
-  var previousGuesses = new Array;
+  var placeHold = [];
+  var previousGuesses = [];
   var wrongGuessCount = [];
+  var guessWord = [];
+
+  function splitWord() {
+    var hangLetters = (hangWord.split(" "));
+    console.log(hangLetters)
+  }
+
+  /* var uniqueLetters = hangWord.filter(function (el, i, arr) {
+    return arr.indexOf(el) === i;
+  });
+ */
 
   console.log(hangWord);
 
   //replace display of work with _s
-  var placeHold = [];
   for (var i = 0; i < hangWord.length; i++) placeHold.push("_");
-
-  console.log(placeHold);
-
   document.getElementById("guessWord").innerHTML = (placeHold.join(" "));
 
 
@@ -58,21 +66,19 @@ $.get('https://raw.githubusercontent.com/AlexHakman/Java-challenge/master/words.
 
           if (input == hangWord[i]) {
             found = true;
-            $().append(input);
           }
         }
         if (found) {
           checkAnswer();
           function checkAnswer() {
-            var guessWord = [];
-            for (var i = 0; i < hangWord.length; i++) placeHold.push(input); {
-              guessWord.push(input);
+            guessWord.push(input);
 
-              console.log(guessWord);
-            }
+            console.log(guessWord);
+
           }
         }
-        else { wrongAnswer();
+        else {
+          wrongAnswer();
           wrongGuessCount.push(input);
         }
       }
@@ -84,18 +90,27 @@ $.get('https://raw.githubusercontent.com/AlexHakman/Java-challenge/master/words.
 
 
   //create winning and losing conditions
-  if (guessWord == hangWord) {
-    victoryMessage();
+  function victory() {
+
+
+    console.log(uniqueLetters)
+
+    if (uniqueLetters.sort().join(',') === guessWord.sort().join(',')) {
+      alert('You win!');
+    }
+
   };
 
 
   function wrongAnswer() {
-    
+
     console.log(wrongGuessCount);
 
     if (wrongGuessCount.length === 6) {
       alert("You lose!")
     }
+
+    //draw body parts for wrong answers
   }
 
 });
